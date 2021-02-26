@@ -6,8 +6,9 @@ var fetch = require('node-fetch');
 // function returns filename based on current time/date
 function getFilename(){
   // get date
-  var currentdate = new Date();
-  var date = currentdate.toLocaleDateString('en-CA');
+  var raw = JSON.stringify(new Date());
+  var index = raw.indexOf('T');
+  var date  = raw.substring(1,index);
 
   // create if directory does not exist
   var dirname = "./"+ date;
@@ -16,11 +17,11 @@ function getFilename(){
   }
 
   // get time
-  var time = currentdate.toLocaleString("en-US", {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false});
-  time = time.replaceAll(':','-');
+  var time  = raw.substring(index+1,index+9);
+  time = time.replace(/:/g, '-');
 
   // return path and file name
-  return (date + '/' + time + '.json');
+  return (date + '/' + time + '.json');  
 }
 
 // function requests bus data from MBTA, saves data to file
